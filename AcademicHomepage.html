@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liu | Personal Academic Homepage</title>
+<style>
+  :root{
+    --navy:#1a3a5c;
+    --navy-dark:#12293f;
+    --accent:#2b6cb0;
+    --bg:#f7f8fa;
+    --card:#ffffff;
+    --text:#2d3748;
+    --muted:#718096;
+    --border:#e2e8f0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"Georgia","Songti SC","SimSun",serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.7;
+  }
+  /* ===== 顶部导航栏 ===== */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:var(--navy);
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+  }
+  nav{
+    max-width:1000px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;flex-wrap:wrap;
+  }
+  .nav-links{display:flex;flex-wrap:wrap;}
+  nav a{
+    color:#dbe6f0;text-decoration:none;
+    padding:16px 14px;font-size:15px;
+    font-family:"Helvetica Neue","Microsoft YaHei",sans-serif;
+    transition:background .2s,color .2s;
+  }
+  nav a:hover{background:var(--navy-dark);color:#fff;}
+  #langBtn{
+    background:transparent;border:1px solid #6b93bd;color:#dbe6f0;
+    padding:6px 14px;border-radius:20px;cursor:pointer;
+    font-size:14px;font-family:"Helvetica Neue","Microsoft YaHei",sans-serif;
+    transition:all .2s;
+  }
+  #langBtn:hover{background:#fff;color:var(--navy);}
+  main{max-width:1000px;margin:0 auto;padding:0 20px;}
+  section{padding:48px 0;border-bottom:1px solid var(--border);}
+  h2{
+    color:var(--navy);font-size:1.6rem;margin-bottom:24px;
+    border-left:5px solid var(--accent);padding-left:12px;
+  }
+  /* ===== 头部姓名区 ===== */
+  .hero{
+    display:flex;align-items:center;gap:36px;padding:56px 0;
+  }
+  .avatar-wrap{
+    width:120px;height:120px;flex-shrink:0;
+    border-radius:50%;overflow:hidden;
+    border:3px solid var(--accent);
+    box-shadow:0 4px 14px rgba(26,58,92,.3);
+    background:var(--navy);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .avatar-wrap img{
+    width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;
+  }
+  /* 头像加载失败时显示的首字母占位（默认隐藏） */
+  .avatar-fallback{
+    display:none;color:#fff;font-size:44px;
+    font-family:Georgia,serif;letter-spacing:1px;
+  }
+  .hero h1{color:var(--navy);font-size:2.2rem;}
+  .hero .title-line{color:var(--accent);font-size:1.15rem;margin-top:6px;}
+  .hero .affil{color:var(--muted);margin-top:4px;}
+  /* ===== 研究方向标签 ===== */
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0;}
+  .tag{
+    background:#e8f0f8;color:var(--navy);
+    padding:5px 14px;border-radius:16px;font-size:.88rem;
+    border:1px solid #c5d7ea;
+  }
+  /* ===== 论文列表 ===== */
+  #filterInput{
+    width:100%;max-width:360px;padding:9px 14px;margin-bottom:28px;
+    border:1px solid var(--border);border-radius:6px;
+    font-size:15px;font-family:inherit;
+  }
+  #filterInput:focus{outline:none;border-color:var(--accent);}
+  .year-group{margin-bottom:28px;}
+  .year-group h3{
+    color:var(--accent);font-size:1.2rem;margin-bottom:12px;
+  }
+  .pub{
+    background:var(--card);border:1px solid var(--border);
+    border-left:3px solid var(--navy);
+    padding:14px 18px;margin-bottom:12px;border-radius:4px;
+    transition:box-shadow .2s;
+  }
+  .pub:hover{box-shadow:0 3px 10px rgba(0,0,0,.08);}
+  .pub .authors{color:var(--muted);font-size:.92rem;}
+  .pub .pub-title{font-weight:bold;margin:3px 0;}
+  .pub .journal{font-style:italic;font-size:.92rem;color:var(--navy);}
+  .pub a{color:var(--accent);text-decoration:none;font-size:.88rem;margin-left:8px;}
+  .pub a:hover{text-decoration:underline;}
+  /* ===== 课程卡片 ===== */
+  .course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+  .course-card{
+    background:var(--card);border:1px solid var(--border);
+    border-top:4px solid var(--accent);
+    border-radius:6px;padding:22px;
+    transition:transform .2s,box-shadow .2s;
+  }
+  .course-card:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.1);}
+  .course-card h3{color:var(--navy);margin-bottom:4px;font-size:1.15rem;}
+  .course-card .term{color:var(--muted);font-size:.88rem;margin-bottom:10px;}
+  .course-card a{color:var(--accent);font-size:.9rem;text-decoration:none;}
+  .course-card a:hover{text-decoration:underline;}
+  /* ===== 天文摄影 ===== */
+  .photo-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;
+  }
+  .photo-item{
+    cursor:pointer;overflow:hidden;border-radius:6px;
+    border:1px solid var(--border);background:var(--card);
+  }
+  .photo-item img{
+    width:100%;height:180px;object-fit:cover;display:block;
+    transition:transform .3s;
+  }
+  .photo-item:hover img{transform:scale(1.06);}
+  .photo-item figcaption{
+    padding:10px 12px;font-size:.88rem;color:var(--muted);
+  }
+  /* ===== Lightbox ===== */
+  #lightbox{
+    display:none;position:fixed;inset:0;z-index:200;
+    background:rgba(10,20,35,.92);
+    align-items:center;justify-content:center;flex-direction:column;
+    cursor:zoom-out;
+  }
+  #lightbox.active{display:flex;}
+  #lightbox img{max-width:88vw;max-height:78vh;border-radius:4px;}
+  #lbCaption{color:#dbe6f0;margin-top:14px;font-size:1rem;}
+  /* ===== 页脚 ===== */
+  footer{
+    background:var(--navy);color:#9db4c9;text-align:center;
+    padding:28px 20px;font-size:.9rem;
+    font-family:"Helvetica Neue","Microsoft YaHei",sans-serif;
+  }
+  footer a{color:#c5d7ea;text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+  /* ===== 响应式：手机端头像居中 ===== */
+  @media (max-width:640px){
+    .hero{flex-direction:column;text-align:center;padding:40px 0;}
+    .avatar-wrap{margin:0 auto;}
+    .tags{justify-content:center;}
+    nav{justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部导航栏（含语言切换按钮） ===== -->
+<header>
+  <nav>
+    <div class="nav-links">
+      <a href="#about" data-zh="个人信息" data-en="About">个人信息</a>
+      <a href="#pubs" data-zh="发表论文" data-en="Publications">发表论文</a>
+      <a href="#courses" data-zh="讲授课程" data-en="Teaching">讲授课程</a>
+      <a href="#astro" data-zh="天文摄影" data-en="Astrophotography">天文摄影</a>
+    </div>
+    <button id="langBtn" onclick="toggleLang()">EN</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ===== 头部姓名区 ===== -->
+<!-- 头像使用说明：将方形裁剪后的照片命名为 avatar.jpg 放入 images 文件夹即可自动显示；
+     若图片加载失败，会自动降级显示姓名首字母 "ZL" 占位圆。 -->
+<section class="hero" style="border-bottom:1px solid var(--border);">
+  <div class="avatar-wrap">
+    <img src="images/avatar.jpg" alt="avatar"
+         onerror="this.style.display='none';this.parentElement.querySelector('.avatar-fallback').style.display='block';">
+    <span class="avatar-fallback">ZL</span>
+  </div>
+  <div>
+    <h1 data-zh="刘 晨容" data-en="Chenrong Liu">刘 晨容</h1><!-- 在此处修改你的姓名 -->
+    <div class="title-line" data-zh="博士" data-en="Doctor">博士</div>
+    <div class="affil" data-zh="温州大学物理学院" data-en="School of Physics, Wenzhou University">温州大学物理学院</div>
+  </div>
+</section>
+
+<!-- ===== 个人信息 ===== -->
+<section id="about">
+  <h2 data-zh="个人信息" data-en="About Me">个人信息</h2>
+  <p>
+    <span data-zh="邮箱：" data-en="Email: ">邮箱：</span>
+    <!-- crliu@wzu.edu.cn -->
+    <a href="mailto:crliu@wzu.edu.cn">crliu@wzu.edu.cn</a>
+  </p>
+  <h3 data-zh="研究方向" data-en="Research Interests" style="margin:18px 0 0;color:var(--navy);">研究方向</h3>
+  <div class="tags">
+    <!-- 在此处修改你的研究方向标签 -->
+    <span class="tag" data-zh="量子多体物理" data-en="Quantum Many-Body Physics">量子多体物理</span>
+    <span class="tag" data-zh="凝聚态理论" data-en="Condensed Matter Theory">凝聚态理论</span>
+    <span class="tag" data-zh="量子纠缠与拓扑序" data-en="Quantum Entanglement & Topological Order">量子纠缠与拓扑序</span>
+    <span class="tag" data-zh="冷原子物理" data-en="Ultracold Atoms">冷原子物理</span>
+  </div>
+  <h3 data-zh="教育背景" data-en="Education" style="margin:18px 0 0;color:var(--navy);">教育背景</h3>
+  <ul>
+    <!-- 在此处修改你的教育背景 -->
+    <li data-zh="2014–2020 复旦大学 物理学 博士" data-en="2014–2020 Ph.D. in Physics, Fudan University">2014–2020 复旦大学 物理学 博士</li>
+	<li data-zh="2017–2019 美国休斯顿大学 访问学者" data-en="2017–2019 Visiting Scholar, University of Houston">2017–2019 美国休斯顿大学 访问学者</li>
+    <li data-zh="2010–2014 南昌大学 物理学 学士" data-en="2010–2014 B.S. in Physics, Nanchang University">2010–2014 南昌大学 物理学 学士</li>
+  </ul>
+  <h3 data-zh="学术兼职" data-en="Academic Services" style="margin:18px 0 0;color:var(--navy);">学术兼职</h3>
+  <ul>
+    <!-- 在此处修改你的学术兼职 -->
+    <li data-zh="《Physics Letters A》审稿人" data-en="Reviewer, Physics Letters A">《Physics Letters A》审稿人</li>
+  </ul>
+</section>
+
+<!-- ===== 发表论文 ===== -->
+<section id="pubs">
+  <h2 data-zh="发表论文" data-en="Publications">发表论文</h2>
+  <input id="filterInput" type="text"
+         placeholder="按关键词过滤论文… (Filter publications by keyword…)"
+         oninput="filterPubs()">
+  <div class="year-group">
+    <h3>2025</h3>
+    <!-- 在此处修改你的论文（2025年） -->
+    <div class="pub" data-keywords="Entanglement and fluctuations of the fractonic phases in a one-dimensional dipole-conserving Bose-Hubbard chain">
+      <div class="authors" data-zh="Chenrong Liu" data-en="Chenrong Liu">Chenrong Liu</div>
+      <div class="pub-title" data-zh="Entanglement and fluctuations of the fractonic phases in a one-dimensional dipole-conserving Bose-Hubbard chain" data-en="Entanglement and fluctuations of the fractonic phases in a one-dimensional dipole-conserving Bose-Hubbard chain">Entanglement and fluctuations of the fractonic phases in a one-dimensional dipole-conserving Bose-Hubbard chain</div>
+      <div>
+        <span class="journal" data-zh="Physical Review B" data-en="Physical Review B">Physical Review B</span>
+        <a href=" https://doi.org/10.1103/vsy9-f5yn">[DOI]</a>
+      </div>
+    </div>
+  </div>
+  <div class="year-group">
+    <h3>2024</h3>
+    <!-- 在此处修改你的论文（2023年） -->
+    <div class="pub" data-keywords="Ladder Bose-hubbard">
+      <div class="authors">Po Chen, Chenrong Liu*</div>
+      <div class="pub-title" data-zh="Ground-state phase diagram of two-component interacting bosons on a two-leg ladder" data-en="Ground-state phase diagram of two-component interacting bosons on a two-leg ladder">Ground-state phase diagram of two-component interacting bosons on a two-leg ladder</div>
+      <div>
+        <span class="journal">Physics Letters A</span>
+        <a href="https://doi.org/10.1016/j.physleta.2024.129485">[DOI]</a>
+      </div>
+    </div>
+  </div>
+  <div class="year-group">
+    <h3>2023</h3>
+    <!-- 在此处修改你的论文（2023年） -->
+    <div class="pub" data-keywords="Multi-component Bose-Hubbard">
+      <div class="authors">Chenrong Liu, Po Chen, Linli He, and Fangfang Xu</div>
+      <div class="pub-title" data-zh="Ground-state properties of multicomponent bosonic mixtures: A Gutzwiller mean-field study" data-en="Ground-state properties of multicomponent bosonic mixtures: A Gutzwiller mean-field study">Ground-state properties of multicomponent bosonic mixtures: A Gutzwiller mean-field study</div>
+      <div>
+        <span class="journal">Physical Review A</span>
+        <a href="https://doi.org/10.1103/PhysRevA.108.013309">[DOI]</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-group">
+    <h3>2023</h3>
+    <!-- 在此处修改你的论文（2023年） -->
+    <div class="pub" data-keywords="Generalized effective-potential Landau theory for a tunable state-dependent hexagonal optical lattice">
+      <div class="authors">Sheng Yue, Dan-Yang Chen, Liwen Zhang, Chenrong Liu*, Ming Yang*, Zhi Lin*</div>
+      <div class="pub-title" data-zh="Generalized effective-potential Landau theory for a tunable state-dependent hexagonal optical lattice" data-en="Generalized effective-potential Landau theory for a tunable state-dependent hexagonal optical lattice">Generalized effective-potential Landau theory for a tunable state-dependent hexagonal optical lattice</div>
+      <div>
+        <span class="journal">Physics Letters A</span>
+        <a href="https://doi.org/10.1016/j.physleta.2022.128577">[DOI]</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-group">
+    <h3>2020</h3>
+    <!-- 在此处修改你的论文（2020年） -->
+    <div class="pub" data-keywords="Novel quantum phases of two-component bosons with pair hopping in synthetic dimension">
+      <div class="authors">Zhi Lin, Chenrong Liu, Yan Chen</div>
+      <div class="pub-title" data-zh="Novel quantum phases of two-component bosons with pair hopping in synthetic dimension" data-en="Novel quantum phases of two-component bosons with pair hopping in synthetic dimension">Novel quantum phases of two-component bosons with pair hopping in synthetic dimension</div>
+      <div>
+        <span class="journal">Physical Review Letters</span>
+        <a href="https://doi.org/10.1103/PhysRevLett.125.245301">[DOI]</a>
+      </div>
+    </div>
+  </div>
+
+   <div class="year-group">
+    <h3>2019</h3>
+    <!-- 在此处修改你的论文（2019年） -->
+    <div class="pub" data-keywords="Temperature-dependent spectral function of a Kondo impurity in an -wave superconductor">
+      <div class="authors">Chenrong Liu, Yixuan Huang, Yan Chen, CS Ting</div>
+      <div class="pub-title" data-zh="Temperature-dependent spectral function of a Kondo impurity in an s-wave superconductor" data-en="Temperature-dependent spectral function of a Kondo impurity in an s-wave superconductor">Temperature-dependent spectral function of a Kondo impurity in an s-wave superconductor</div>
+      <div>
+        <span class="journal">Physical Review B</span>
+        <a href="https://doi.org/10.1103/PhysRevB.99.174502">[DOI]</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-group">
+    <h3>2019</h3>
+    <!-- 在此处修改你的论文（2019年） -->
+    <div class="pub" data-keywords="Sweeping cluster algorithm for quantum spin systems with strong geometric restrictions">
+      <div class="authors">Zheng Yan, Yongzheng Wu, Chenrong Liu, Olav F Syljuåsen, Jie Lou, Yan Chen</div>
+      <div class="pub-title" data-zh="Sweeping cluster algorithm for quantum spin systems with strong geometric restrictions" data-en="Sweeping cluster algorithm for quantum spin systems with strong geometric restrictions">Sweeping cluster algorithm for quantum spin systems with strong geometric restrictions</div>
+      <div>
+        <span class="journal">Physical Review B</span>
+        <a href="https://doi.org/10.1103/PhysRevB.99.165135">[DOI]</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-group">
+    <h3>2019</h3>
+    <!-- 在此处修改你的论文（2019年） -->
+    <div class="pub" data-keywords="Bosonic integer quantum Hall state without Landau levels on a square lattice">
+      <div class="authors">Wanli Liu, Zhiyu Dong, Zhihuan Dong, Chenrong Liu, Wei Yan, Yan Chen</div>
+      <div class="pub-title" data-zh="Bosonic integer quantum Hall state without Landau levels on a square lattice" data-en="Bosonic integer quantum Hall state without Landau levels on a square lattice">Bosonic integer quantum Hall state without Landau levels on a square lattice</div>
+      <div>
+        <span class="journal">Physical Review B</span>
+        <a href="https://doi.org/10.1103/PhysRevB.99.085305">[DOI]</a>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="year-group">
+    <h3>2016</h3>
+    <!-- 在此处修改你的论文（2019年） -->
+    <div class="pub" data-keywords="Realizing Tao-Thouless-like state in fractional quantum spin Hall effect">
+      <div class="authors">Chen-Rong Liu, Yao-Wu Guo, Zhuo-Jun Li, Wei Li, Yan Chen</div>
+      <div class="pub-title" data-zh="Realizing Tao-Thouless-like state in fractional quantum spin Hall effect" data-en="Realizing Tao-Thouless-like state in fractional quantum spin Hall effect">Realizing Tao-Thouless-like state in fractional quantum spin Hall effect</div>
+      <div>
+        <span class="journal">Scientific Reports</span>
+        <a href="https://doi.org/10.1038/srep33472">[DOI]</a>
+      </div>
+    </div>
+  </div>
+
+
+
+</section>
+
+<!-- ===== 讲授课程 ===== -->
+<section id="courses">
+  <h2 data-zh="讲授课程" data-en="Courses Taught">讲授课程</h2>
+  <div class="course-grid">
+    <!-- 在此处修改你的课程信息 -->
+    <div class="course-card">
+      <h3 data-zh="原子物理学" data-en="Atomic Physics">原子物理学</h3>
+      <div class="term" data-zh="春季学期（大二年级）" data-en="Spring">春季学期</div>
+      <p data-zh="介绍原子物理基本原理：原子结构，量子力学初步，多电子原子，X射线，及原子核物理初步。"
+         data-en="Basic principles of atomic physics: atomic structure, introductory quantum mechanics, multi-electron atoms, X-rays, and fundamentals of nuclear physics.">
+        介绍原子物理基本原理：原子结构，量子力学初步，多电子原子，X射线，及原子核物理初步。</p>
+      <a href="https://spoc.wzu.edu.cn/portal/course/6900/22577.mooc" data-zh="下载讲义"  data-en="Download lecture notes">下载讲义</a>
+    </div>
+    <div class="course-card">
+      <h3 data-zh="高等统计物理学" data-en="Advanced Statistical Mechanics">统计物理</h3>
+      <div class="term" data-zh="秋季学期（研究生一年级）" data-en="Fall">秋季学期（研究生一年级）</div>
+      <p data-zh="热力学基本原理，系综理论，近独立子系，量子统计初步。"
+         data-en="Fundamentals of thermodynamics, ensemble theory, nearly independent particle systems, and an introduction to quantum statistics.">
+        热力学基本原理，系综理论，近独立子系，量子统计初步</p>
+      <a href="https://spoc.wzu.edu.cn/portal/frontCourseIndex/course.mooc?keyWord=%25E9%25AB%2598%25E7%25AD%2589%25E7%25BB%259F%25E8%25AE%25A1%25E7%2589%25A9%25E7%2590%2586" data-zh="下载讲义" data-en="Download lecture notes">下载讲义</a>
+    </div>
+  </div>
+
+  <div class="course-card">
+      <h3 data-zh="概率论与数理统计" data-en="Possibility and Statistics">概率统计</h3>
+      <div class="term" data-zh="春秋季学期" data-en="Fall and Spring">春秋学期</div>
+      <p data-zh="概率论基本知识，统计初步，参数估计。"
+         data-en="Fundamentals of probability theory, introductory statistics, and parameter estimation.">
+        热力学基本原理，系综理论，近独立子系，量子统计初步</p>
+      <a href="#" data-zh="下载讲义" data-en="Download lecture notes">下载讲义</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 天文摄影 ===== -->
+<section id="astro">
+  <h2 data-zh="天文摄影（个人作品）" data-en="Astrophotography">天文摄影</h2>
+  <!-- 在此处修改你的照片说明文字 -->
+  <div class="photo-grid" id="photoGrid"></div>
+</section>
+
+</main>
+
+<!-- ===== 页脚（版权 + ICP备案号） ===== -->
+<footer>
+  <p><span id="copyText">© 2026 刘晨容 · 保留所有权利</span></p>
+  <!-- 在此处修改你的ICP备案号 -->
+  <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener"></a></p>
+</footer>
+
+<!-- ===== Lightbox ===== -->
+<div id="lightbox" onclick="closeLightbox()">
+  <img id="lbImg" src="" alt="">
+  <div id="lbCaption"></div>
+</div>
+
+<script>
+/* ===== 照片数据（在此处修改你的照片说明，中英各一套） ===== */
+var photos = [
+  {src:"images/Saturn.jpg", zh:"土星 - 114mm 口径反射式望远镜相机拍摄", en:"Saturn - 114mm reflector telescope"},
+  {src:"images/Moon1.jpg", zh:"月球 -  114mm 口径反射式望远镜相机拍摄", en:"The Moon -  114mm reflector telescope"},
+  {src:"images/Moon2.jpg", zh:"月球 -  114mm 口径反射式望远镜相机拍摄", en:"The Moon -  114mm reflector telescope"},
+  {src:"images/Moon3.jpg", zh:"月球 -  114mm 口径反射式望远镜相机拍摄", en:"The Moon -  114mm reflector telescope"},
+  {src:"images/Moon4.jpg", zh:"月球 -  114mm 口径反射式望远镜相机拍摄", en:"The Moon -  114mm reflector telescope"},
+  {src:"images/Moon5.jpg", zh:"满月 -  114mm 口径反射式望远镜手机拍摄", en:"The full Moon -  114mm reflector telescope"},
+  {src:"images/Venus.jpg", zh:"金星 -  114mm 口径反射式望远镜相机拍摄", en:"Venus -  114mm reflector telescope"}
+];
+
+/* ===== 生成照片网格 ===== */
+(function buildGrid(){
+  var grid = document.getElementById("photoGrid");
+  photos.forEach(function(p, i){
+    var fig = document.createElement("figure");
+    fig.className = "photo-item";
+    var img = document.createElement("img");
+    img.src = p.src;
+    img.alt = "photo" + (i+1);
+    img.loading = "lazy";
+    var cap = document.createElement("figcaption");
+    cap.setAttribute("data-zh", p.zh);
+    cap.setAttribute("data-en", p.en);
+    cap.textContent = p.zh;
+    fig.appendChild(img);
+    fig.appendChild(cap);
+    fig.onclick = function(){ openLightbox(p.src, p); };
+    grid.appendChild(fig);
+  });
+})();
+
+/* ===== Lightbox ===== */
+function openLightbox(src, p){
+  document.getElementById("lbImg").src = src;
+  document.getElementById("lbCaption").textContent =
+    document.documentElement.lang === "zh-CN" ? p.zh : p.en;
+  document.getElementById("lightbox").classList.add("active");
+}
+function closeLightbox(){
+  document.getElementById("lightbox").classList.remove("active");
+}
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape") closeLightbox();
+});
+
+/* ===== 论文关键词过滤 ===== */
+function filterPubs(){
+  var q = document.getElementById("filterInput").value.trim().toLowerCase();
+  document.querySelectorAll(".pub").forEach(function(el){
+    var hay = (el.textContent + " " + (el.getAttribute("data-keywords") || "")).toLowerCase();
+    el.style.display = hay.indexOf(q) !== -1 ? "" : "none";
+  });
+}
+
+/* ===== 中英双语切换 ===== */
+function applyLang(lang){
+  var zh = lang === "zh-CN";
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-zh]").forEach(function(el){
+    el.textContent = zh ? el.getAttribute("data-zh") : el.getAttribute("data-en");
+  });
+  var inp = document.getElementById("filterInput");
+  inp.placeholder = zh ? "按关键词过滤论文…" : "Filter publications by keyword…";
+  document.getElementById("langBtn").textContent = zh ? "EN" : "中文";
+  document.getElementById("copyText").textContent =
+    zh ? "© 2026 刘晨容 · 保留所有权利" : "© 2026 Chenrong Liu · All rights reserved";
+  localStorage.setItem("lang", lang);
+}
+function toggleLang(){
+  applyLang(document.documentElement.lang === "zh-CN" ? "en" : "zh-CN");
+}
+/* 初始化：优先读取 localStorage 记住的语言 */
+applyLang(localStorage.getItem("lang") || "zh-CN");
+</script>
+
+</body>
+</html>
